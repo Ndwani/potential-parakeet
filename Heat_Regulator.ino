@@ -1,5 +1,6 @@
 #include <DHT.h>
 #define Type DHT11
+#define RELAY A0
 int sensePin = 2;
 DHT HT(sensePin,Type);
 float humidity;
@@ -11,23 +12,31 @@ void setup() {
   // put your setup code here, to run once:
 Serial.begin(9600);
 HT.begin();
+pinMode(RELAY,OUTPUT);
 delay(setTime);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   humidity =HT.readHumidity();
   tempC = HT.readTemperature();
-  tempF =HT.readTemperature(true);
+  //tempF =HT.readTemperature(true);
+  
+ // digitalWrite(RELAY,HIGH);
+ 
 
-  Serial.print("Humidity: ");
-  Serial.print(humidity);
-  Serial.print("Temperature ");
-  Serial.print(tempC);
-  Serial.print(" C ");
-  Serial.print(tempF);
-  Serial.print(" F ");
-  Serial.println(" ");
-  delay(delayTime);
+  if(tempC<=40){
+    digitalWrite(RELAY,HIGH);
+    
+    Serial.print(10);
+    Serial.print(",");
+    Serial.print(tempC);
+    Serial.println(" ");
+    }else{
+      digitalWrite(RELAY,LOW);
+      Serial.print(0);
+      Serial.print(",");
+      Serial.print(tempC);
+      Serial.println(" ");}
+  
 
 }
